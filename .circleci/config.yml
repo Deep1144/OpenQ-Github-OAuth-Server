@@ -1,0 +1,17 @@
+version: 2.1
+orbs:
+  kubernetes: circleci/kubernetes@0.12.0
+jobs:
+  build:
+    machine: true
+    steps:
+      - checkout
+      - run: echo "$DOCKER_PASSWORD" | docker login --username $DOCKER_USER --password-stdin
+      - run: docker build -t alo42/github-oauth-server:latest .
+      - run: docker push alo42/github-oauth-server:latest
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build:
+          context: OpenQ
