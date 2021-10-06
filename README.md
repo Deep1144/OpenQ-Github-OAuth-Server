@@ -47,3 +47,7 @@ By default all origins are allowed but you can restrict it per app.
 ```
 OTHERAPP_ORIGIN=https://yourdomain.com,https://dev.yourdomain.com
 ```
+
+# Deploy
+
+Tag a commit as local, development, staging or production to deploy.
