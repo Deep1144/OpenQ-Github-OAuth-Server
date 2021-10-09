@@ -12,4 +12,4 @@ ARG clientSecret
 ENV OPENQ_SECRET=$clientSecret
 COPY . .
 EXPOSE 3001
-ENTRYPOINT [ "nodemon", "server.js" ]
+ENTRYPOINT [ "yarn", "start:dev" ]

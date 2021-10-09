@@ -12,4 +12,4 @@ ARG clientSecret
 ENV OPENQ_SECRET=$clientSecret
 COPY . .
 EXPOSE 3001
-CMD [ "node", "server.js" ]
+CMD [ "yarn", "start" ]

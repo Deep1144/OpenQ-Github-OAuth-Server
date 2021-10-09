@@ -4,7 +4,7 @@ const axios = require('axios');
 const express = require('express');
 const server = express();
 const cors = require('cors');
-const port = process.env.PORT || 3000;
+const port = 3001;
 const pathPrefix = process.env.PATH_PREFIX || '';
 
 const checkOrigin = (req, callback) => {
