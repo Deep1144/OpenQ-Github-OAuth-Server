@@ -40,7 +40,7 @@ server.get(pathPrefix + '/', cors(checkOrigin), async (req, res) => {
         res.status(e.response.status).json({ error: 'internal_error', error_description: e.message });
       }
     } else {
-      res.status(400).json({ error: 'bad_request', error_description: `App ${app} is not configured.` });
+      res.status(400).json({ error: 'bad_request', error_description: `App ${app} is not configured. Requires client_id and client_secret` });
     }
   } else {
     res.status(400).json({ error: 'bad_request', error_description: 'No app or code provided.' });

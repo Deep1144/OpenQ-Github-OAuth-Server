@@ -1,5 +1,9 @@
 # GitHub Multiapp OAuth Server
 
+Add a `.env` file with:
+OPENQ_ID=""
+OPENQ_SECRET=""
+
 A simple express server that can easily be configured to serve multiple OAuth apps.
 
 The problem is that each OAuth app needs its own server endpoint to exchange an auth code for an access token.
