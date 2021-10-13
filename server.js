@@ -1,27 +1,17 @@
 const axios = require('axios');
 const express = require('express');
-const server = express();
+const app = express();
 const cors = require('cors');
 const dayjs = require('dayjs');
 const jwt = require('jsonwebtoken');
 
 require('dotenv').config();
 
-const pathPrefix = process.env.PATH_PREFIX || '';
 const port = 3001;
 
-const checkOrigin = (req, callback) => {
-  const app = req.query.app;
-  const allowedOrigins = process.env[app.toUpperCase() + '_ORIGIN'];
-  if (allowedOrigins) {
-    callback(null, { origin: allowedOrigins.split(',').includes(req.header('Origin')) });
-  } else {
-    // if no allowed origins are configured for an app, allow all
-    callback(null, { origin: true });
-  }
-};
+app.use(cors({ credentials: true, origin: process.env.ORIGIN_URL }));
 
-server.get(pathPrefix + '/', cors(checkOrigin), async (req, res) => {
+app.get('/', async (req, res) => {
   const app = req.query.app;
   const code = req.query.code;
   if (app && code) {
@@ -57,6 +47,6 @@ server.get(pathPrefix + '/', cors(checkOrigin), async (req, res) => {
   }
 });
 
-server.listen(port, () => {
+app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
