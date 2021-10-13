@@ -1,11 +1,14 @@
-
-require('dotenv').config();
 const axios = require('axios');
 const express = require('express');
 const server = express();
 const cors = require('cors');
-const port = 3001;
+const dayjs = require('dayjs');
+const jwt = require('jsonwebtoken');
+
+require('dotenv').config();
+
 const pathPrefix = process.env.PATH_PREFIX || '';
+const port = 3001;
 
 const checkOrigin = (req, callback) => {
   const app = req.query.app;
@@ -35,6 +38,13 @@ server.get(pathPrefix + '/', cors(checkOrigin), async (req, res) => {
             Accept: 'application/json'
           }
         });
+
+        res.cookie("github_oauth_token", auth.data.access_token, {
+          secure: false,
+          httpOnly: true,
+          expires: dayjs().add(30, "days").toDate(),
+        });
+
         res.json(auth.data);
       } catch (e) {
         res.status(e.response.status).json({ error: 'internal_error', error_description: e.message });
