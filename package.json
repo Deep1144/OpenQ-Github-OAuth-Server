@@ -24,6 +24,7 @@
   "homepage": "https://github.com/mktcode/github-multiapp-oauth-server#readme",
   "dependencies": {
     "axios": "^0.21.1",
+    "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "dayjs": "^1.10.7",
     "dotenv": "^10.0.0",

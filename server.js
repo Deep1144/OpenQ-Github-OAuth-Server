@@ -4,12 +4,26 @@ const app = express();
 const cors = require('cors');
 const dayjs = require('dayjs');
 const jwt = require('jsonwebtoken');
+const cookieParser = require('cookie-parser');
 
 require('dotenv').config();
 
 const port = 3001;
 
 app.use(cors({ credentials: true, origin: process.env.ORIGIN_URL }));
+app.use(cookieParser());
+
+app.get('/checkAuth', async (req, res) => {
+  // MAIN CODE HERE :
+  const signedCookies = req.signedCookies; // get signed cookies
+  console.log('signed-cookies:', signedCookies);
+  const cookies = req.cookies; // get not signed cookies
+  console.log('not-signed-cookies:', cookies);
+  // or access directly to one cookie by its name :
+  const myTestCookie = req.signedCookies.github_oauth_token;
+  console.log('our test signed cookie:', myTestCookie);
+  res.send('get cookie');
+}
 
 app.get('/', async (req, res) => {
   const app = req.query.app;
