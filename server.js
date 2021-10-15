@@ -11,19 +11,19 @@ require('dotenv').config();
 const port = 3001;
 
 app.use(cors({ credentials: true, origin: process.env.ORIGIN_URL }));
-app.use(cookieParser());
+app.use(cookieParser('entropydfnjd23'));
 
 app.get('/checkAuth', async (req, res) => {
-  // MAIN CODE HERE :
-  const signedCookies = req.signedCookies; // get signed cookies
-  console.log('signed-cookies:', signedCookies);
-  const cookies = req.cookies; // get not signed cookies
-  console.log('not-signed-cookies:', cookies);
-  // or access directly to one cookie by its name :
-  const myTestCookie = req.signedCookies.github_oauth_token;
-  console.log('our test signed cookie:', myTestCookie);
-  res.send('get cookie');
-}
+  const oauthToken = req.signedCookies.github_oauth_token;
+
+  if (typeof oauthToken == "undefined") {
+    res.statusCode = 401;
+    return res.send("No github oauth token.");
+  } else {
+    res.statusCode = 200;
+    return res.send("Authorized");
+  }
+});
 
 app.get('/', async (req, res) => {
   const app = req.query.app;
@@ -44,6 +44,7 @@ app.get('/', async (req, res) => {
         });
 
         res.cookie("github_oauth_token", auth.data.access_token, {
+          signed: true,
           secure: false,
           httpOnly: true,
           expires: dayjs().add(30, "days").toDate(),
