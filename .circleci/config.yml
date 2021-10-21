@@ -7,8 +7,8 @@ jobs:
     steps:
       - checkout
       - run: echo "$DOCKER_PASSWORD" | docker login --username $DOCKER_USER --password-stdin
-      - run: docker build -t alo42/github-oauth-server:$CIRCLE_TAG --build-arg port=3001 --build-arg clientId=$OPENQ_ID --build-arg clientSecret=$OPENQ_SECRET .
-      - run: docker push alo42/github-oauth-server:$CIRCLE_TAG
+      - run: docker build -t openq/github-oauth-server:$CIRCLE_TAG --build-arg port=3001 --build-arg clientId=$OPENQ_ID --build-arg clientSecret=$OPENQ_SECRET .
+      - run: docker push openq/github-oauth-server:$CIRCLE_TAG
 workflows:
   version: 2
   build:
