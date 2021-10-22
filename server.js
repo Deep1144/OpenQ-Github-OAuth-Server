@@ -13,16 +13,6 @@ const port = 3001;
 app.use(cors({ credentials: true, origin: process.env.ORIGIN_URL }));
 app.use(cookieParser('entropydfnjd23'));
 
-app.get('/checkAuth', async (req, res) => {
-  const oauthToken = req.signedCookies.github_oauth_token;
-
-  if (typeof oauthToken == "undefined") {
-    return res.status(401).json({ isAuthenticated: false });
-  } else {
-    return res.status(200).json({ isAuthenticated: true });
-  }
-});
-
 app.get('/', async (req, res) => {
   const app = req.query.app;
   const code = req.query.code;
@@ -58,6 +48,20 @@ app.get('/', async (req, res) => {
   } else {
     res.status(400).json({ error: 'bad_request', error_description: 'No app or code provided.' });
   }
+});
+
+app.get('/checkAuth', async (req, res) => {
+  const oauthToken = req.signedCookies.github_oauth_token;
+  if (typeof oauthToken == "undefined") {
+    return res.status(200).json({ isAuthenticated: false });
+  } else {
+    return res.status(200).json({ isAuthenticated: true });
+  }
+});
+
+app.get('/logout', async (req, res) => {
+  res.clearCookie("github_oauth_token");
+  return res.status(200).json({ isAuthenticated: false });
 });
 
 app.listen(port, () => {
