@@ -17,11 +17,9 @@ app.get('/checkAuth', async (req, res) => {
   const oauthToken = req.signedCookies.github_oauth_token;
 
   if (typeof oauthToken == "undefined") {
-    res.statusCode = 401;
-    return res.send("No github oauth token.");
+    return res.status(401).json({ isAuthenticated: false });
   } else {
-    res.statusCode = 200;
-    return res.send("Authorized");
+    return res.status(200).json({ isAuthenticated: true });
   }
 });
 
