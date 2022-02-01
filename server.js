@@ -10,7 +10,7 @@ require('dotenv').config();
 const port = 3001;
 
 app.use(cors({ credentials: true, origin: process.env.ORIGIN_URL }));
-app.use(cookieParser('entropydfnjd23'));
+app.use(cookieParser(process.env.COOKIE_SIGNER));
 
 app.get('/', async (req, res) => {
 	const app = req.query.app;
