@@ -51,10 +51,35 @@ app.get('/', async (req, res) => {
 
 app.get('/checkAuth', async (req, res) => {
 	const oauthToken = req.signedCookies.github_oauth_token;
+
 	if (typeof oauthToken == 'undefined') {
-		return res.status(200).json({ isAuthenticated: false });
+		// No token at all -> isAuthenticated: false
+		return res.status(200).json({ isAuthenticated: false, avatarUrl: null });
+	}
+
+	let status, data;
+	try {
+		let response = await axios.get('https://api.github.com/user', {
+			headers: {
+				'Authorization': `token ${oauthToken}`
+			}
+		});
+
+		status = response.status;
+		data = response.data;
+	} catch (error) {
+		console.error(error);
+	}
+
+
+	if (status != 200) {
+		// Token present, but expired
+		// Clear the cookie, return isAuthenticated: false
+		res.clearCookie('github_oauth_token');
+		return res.status(200).json({ isAuthenticated: false, avatarUrl: null });
 	} else {
-		return res.status(200).json({ isAuthenticated: true });
+		// Token present but expired -> isAuthenticated: true, login: user login
+		return res.status(200).json({ isAuthenticated: true, avatarUrl: data.avatar_url });
 	}
 });
 
