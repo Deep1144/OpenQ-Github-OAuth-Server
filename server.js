@@ -4,6 +4,7 @@ const app = express();
 const cors = require('cors');
 const dayjs = require('dayjs');
 const cookieParser = require('cookie-parser');
+const ecdsaRecover = require('./utils')
 
 require('dotenv').config();
 
@@ -11,6 +12,24 @@ const port = 3001;
 
 app.use(cors({ credentials: true, origin: process.env.ORIGIN_URL }));
 app.use(cookieParser(process.env.COOKIE_SIGNER));
+
+app.get('/verifySignature', async (req, res) => {
+	const { signedMessage, address } = req.query;
+
+	if (ecdsaRecover(signedMessage, address)) {
+		
+		res.cookie('signedMessage', signedMessage, {
+			signed: false,
+			secure: false,
+			httpOnly: true,
+			expires: dayjs().add(30, 'days').toDate(),
+		});
+	
+		res.json({'valid_signature': true});
+	} else {
+		res.json({'valid_signature': false});
+	}
+});
 
 app.get('/', async (req, res) => {
 	const app = req.query.app;
