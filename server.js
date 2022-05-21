@@ -92,9 +92,9 @@ app.get('/logout', async (req, res) => {
 
 app.get('/verifySignature', async (req, res) => {
 	try {
-		const { signature, address } = req.query;
+		const { signature, account } = req.query;
 		const addressRecovered = await ecdsaRecover(signature, 'OpenQ');
-		if (compareAddress(addressRecovered, address)) {
+		if (compareAddress(addressRecovered, account)) {
 			res.cookie('signature', signature, {
 				signed: true,
 				secure: false,
